@@ -15,9 +15,9 @@ public class User {
     private String id;
     @Indexed(unique = true)
     private String username;
-    private HashSet<Long> observedUsers = new HashSet<>();
-    private HashSet<Long> newPosts = new HashSet<>();
-    private HashSet<Long> newComments = new HashSet<>();
+    private HashSet<String> observedUsernames = new HashSet<>();
+    private HashSet<String> newPostsIds = new HashSet<>();
+    private HashSet<String> newCommentsIds = new HashSet<>();
 
     public User(String username) {
         this.username = username;

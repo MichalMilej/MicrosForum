@@ -13,5 +13,4 @@ public class UsersMicrosApplication {
     public static void main(String[] args) {
         SpringApplication.run(UsersMicrosApplication.class, args);
     }
-
 }
