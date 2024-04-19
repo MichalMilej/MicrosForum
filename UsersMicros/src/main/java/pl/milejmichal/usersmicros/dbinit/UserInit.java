@@ -5,6 +5,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
+import pl.milejmichal.usersmicros.user.User;
 import pl.milejmichal.usersmicros.user.UserRepository;
 import pl.milejmichal.usersmicros.user.UserService;
 
@@ -26,23 +27,25 @@ public class UserInit {
     @Bean
     public void initUsers() {
         for (int i = 1; i < 1000; i++) {
-            userService.addUser("user" + i);
+            var user = new User("user"+i);
+            user.setId(""+i);
+            userRepository.save(user);
         }
     }
 
     @Bean
-    public void addObservedUsers() {
+    public void initObservedUsersIds() {
         // Users 1-10 famous people
         for (int i = 1; i < 10; i++) {
             // Other users
             for (int j = 10; j < 1000; j++) {
-                userService.addObservedUsernames("user" + j,
-                        new HashSet<>(List.of("user" + (i))));
+                userService.addObservedUsersIds("" + j,
+                        new HashSet<>(List.of("" + i)));
             }
         }
         for (int i = 1; i < 1000; i++) {
-            userService.addObservedUsernames("user" + i,
-                    new HashSet<>(List.of("user" + (i+1), "user" + (i+2))));
+            userService.addObservedUsersIds("" + i,
+                    new HashSet<>(List.of("" + (i+1), "" + (i+2))));
         }
     }
 }

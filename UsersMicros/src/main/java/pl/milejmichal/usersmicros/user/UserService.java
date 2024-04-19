@@ -1,6 +1,7 @@
 package pl.milejmichal.usersmicros.user;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.HashSet;
@@ -16,15 +17,20 @@ public class UserService {
         return userRepository.save(new User(username));
     }
 
-    public User addObservedUsernames(String username, HashSet<String> usernamesToObserve) throws IllegalArgumentException {
-        var user = userRepository.findByUsername(username);
+    public User addObservedUsersIds(String userId, HashSet<String> usersIdsToObserve) throws IllegalArgumentException {
+        var user = userRepository.findById(userId);
         if (user.isEmpty())
-            throw new IllegalArgumentException("Username not found!");
-        for (var usernameToObserve : usernamesToObserve) {
-            if (userRepository.findByUsername(usernameToObserve).isPresent()) {
-                user.get().getObservedUsernames().add(usernameToObserve);
+            throw new IllegalArgumentException("User id not found!");
+        for (var userIdToObserve : usersIdsToObserve) {
+            if (userRepository.findByUsername(userIdToObserve).isPresent()) {
+                user.get().getObservedUsersIds().add(userIdToObserve);
             }
         }
         return userRepository.save(user.get());
+    }
+
+    public ResponseEntity<User> getUser(String userId) {
+        var user = userRepository.findById(userId);
+        return user.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
     }
 }
