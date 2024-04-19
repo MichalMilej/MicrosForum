@@ -26,7 +26,7 @@ public class UserInit {
 
     @Bean
     public void initUsers() {
-        for (int i = 1; i < 1000; i++) {
+        for (int i = 0; i < 1000; i++) {
             var user = new User("user"+i);
             user.setId(""+i);
             userRepository.save(user);
@@ -36,14 +36,14 @@ public class UserInit {
     @Bean
     public void initObservedUsersIds() {
         // Users 1-10 famous people
-        for (int i = 1; i < 10; i++) {
+        for (int i = 0; i < 10; i++) {
             // Other users
             for (int j = 10; j < 1000; j++) {
                 userService.addObservedUsersIds("" + j,
                         new HashSet<>(List.of("" + i)));
             }
         }
-        for (int i = 1; i < 1000; i++) {
+        for (int i = 0; i < 1000; i++) {
             userService.addObservedUsersIds("" + i,
                     new HashSet<>(List.of("" + (i+1), "" + (i+2))));
         }

@@ -1,11 +1,9 @@
-package pl.milejmichal.postsmicros.post.comment;
+package pl.milejmichal.postsmicros.post;
 
 import lombok.Data;
 
 @Data
-public class Comment {
-
+public class PostRequest {
     private String userId;
-
     private String text;
 }

@@ -18,5 +18,5 @@ public class Post {
     
     private String text;
 
-    private LinkedList<Comment> comments;
+    private LinkedList<Comment> comments = new LinkedList<>();
 }
