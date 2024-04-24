@@ -1,31 +1,24 @@
-package pl.milejmichal.usersmicros.user;
+package pl.michalmilej.notifmicros.notification;
 
 import lombok.Data;
 import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.util.HashMap;
 import java.util.HashSet;
 
-@Document("users")
+@Document("notifications")
 @Data
-public class User {
+public class Notification {
 
     @Id
-    private String id;
-
-    @Indexed(unique = true)
-    private String username;
-
-    @Indexed(unique = true)
-    private String email;
+    private String userId;
 
     private HashSet<String> observedUsersIds = new HashSet<>();
     private HashSet<String> newPostsIds = new HashSet<>();
     private HashMap<String, String> postsNewCommentsIds = new HashMap<>();
 
-    public User(String username) {
-        this.username = username;
+    public Notification(String userId) {
+        this.userId = userId;
     }
 }

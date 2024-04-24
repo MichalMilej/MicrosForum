@@ -22,7 +22,7 @@ public class UserService {
         if (user.isEmpty())
             throw new IllegalArgumentException("User id not found!");
         for (var userIdToObserve : usersIdsToObserve) {
-            if (userRepository.findByUsername(userIdToObserve).isPresent()) {
+            if (userRepository.findById(userIdToObserve).isPresent()) {
                 user.get().getObservedUsersIds().add(userIdToObserve);
             }
         }

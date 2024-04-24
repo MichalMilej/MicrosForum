@@ -5,6 +5,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import pl.milejmichal.postsmicros.post.comment.Comment;
 
+import java.util.UUID;
+
 @Service
 @RequiredArgsConstructor
 public class PostService {
@@ -28,6 +30,7 @@ public class PostService {
         if (post.isEmpty())
             return ResponseEntity.notFound().build();
         Comment comment = new Comment();
+        comment.setId(UUID.randomUUID().toString());
         comment.setUserId(userId);
         comment.setText(text);
         post.get().getComments().add(comment);

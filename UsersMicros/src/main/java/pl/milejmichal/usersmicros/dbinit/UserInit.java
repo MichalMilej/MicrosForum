@@ -26,26 +26,21 @@ public class UserInit {
 
     @Bean
     public void initUsers() {
+        // Create users
         for (int i = 0; i < 1000; i++) {
-            var user = new User("user"+i);
-            user.setId(""+i);
+            var user = new User("user" + i);
+            user.setId("" + i);
             userRepository.save(user);
         }
-    }
 
-    @Bean
-    public void initObservedUsersIds() {
-        // Users 1-10 famous people
+        // Add observed users
+        // 1-10 famous people, everybody watches them
+        HashSet<String> famousPeople = new HashSet<>();
         for (int i = 0; i < 10; i++) {
-            // Other users
-            for (int j = 10; j < 1000; j++) {
-                userService.addObservedUsersIds("" + j,
-                        new HashSet<>(List.of("" + i)));
-            }
+            famousPeople.add("" + i);
         }
-        for (int i = 0; i < 1000; i++) {
-            userService.addObservedUsersIds("" + i,
-                    new HashSet<>(List.of("" + (i+1), "" + (i+2))));
+        for (int i = 10; i < 1000; i++) {
+            userService.addObservedUsersIds("" + i, famousPeople);
         }
     }
 }
