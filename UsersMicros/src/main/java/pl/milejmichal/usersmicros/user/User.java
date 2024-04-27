@@ -21,9 +21,9 @@ public class User {
     @Indexed(unique = true)
     private String email;
 
-    private HashSet<String> observedUsersIds = new HashSet<>();
-    private HashSet<String> newPostsIds = new HashSet<>();
-    private HashMap<String, String> postsNewCommentsIds = new HashMap<>();
+    private HashSet<String> observedUserIds = new HashSet<>();
+    private HashSet<String> newPostIds = new HashSet<>();
+    private HashMap<String, String> postNewCommentIds = new HashMap<>();
 
     public User(String username) {
         this.username = username;

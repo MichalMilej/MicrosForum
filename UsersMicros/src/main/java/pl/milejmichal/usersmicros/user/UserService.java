@@ -17,13 +17,13 @@ public class UserService {
         return userRepository.save(new User(username));
     }
 
-    public User addObservedUsersIds(String userId, HashSet<String> usersIdsToObserve) throws IllegalArgumentException {
+    public User addObservedUserIds(String userId, HashSet<String> userIdsToObserve) throws IllegalArgumentException {
         var user = userRepository.findById(userId);
         if (user.isEmpty())
             throw new IllegalArgumentException("User id not found!");
-        for (var userIdToObserve : usersIdsToObserve) {
+        for (var userIdToObserve : userIdsToObserve) {
             if (userRepository.findById(userIdToObserve).isPresent()) {
-                user.get().getObservedUsersIds().add(userIdToObserve);
+                user.get().getObservedUserIds().add(userIdToObserve);
             }
         }
         return userRepository.save(user.get());

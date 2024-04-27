@@ -4,6 +4,6 @@ import lombok.Data;
 
 @Data
 public class NewPostNotificationRequest {
-    private String userId; // User who posted
+    private String authorId;
     private String postId;
 }

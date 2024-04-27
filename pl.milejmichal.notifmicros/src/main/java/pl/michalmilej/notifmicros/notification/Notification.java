@@ -14,9 +14,9 @@ public class Notification {
     @Id
     private String userId;
 
-    private HashSet<String> observedUsersIds = new HashSet<>();
-    private HashSet<String> newPostsIds = new HashSet<>();
-    private HashMap<String, String> postsNewCommentsIds = new HashMap<>();
+    private HashSet<String> observedUserIds = new HashSet<>();
+    private HashSet<String> newPostIds = new HashSet<>();
+    private HashMap<String, HashSet<String>> postNewCommentIds = new HashMap<>();
 
     public Notification(String userId) {
         this.userId = userId;

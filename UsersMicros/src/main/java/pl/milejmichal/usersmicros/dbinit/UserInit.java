@@ -10,7 +10,6 @@ import pl.milejmichal.usersmicros.user.UserRepository;
 import pl.milejmichal.usersmicros.user.UserService;
 
 import java.util.HashSet;
-import java.util.List;
 
 @Component
 @RequiredArgsConstructor
@@ -40,7 +39,7 @@ public class UserInit {
             famousPeople.add("" + i);
         }
         for (int i = 10; i < 1000; i++) {
-            userService.addObservedUsersIds("" + i, famousPeople);
+            userService.addObservedUserIds("" + i, famousPeople);
         }
     }
 }

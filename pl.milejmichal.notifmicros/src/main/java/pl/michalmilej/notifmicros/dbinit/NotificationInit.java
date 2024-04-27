@@ -10,7 +10,6 @@ import pl.michalmilej.notifmicros.notification.NotificationRepository;
 import pl.michalmilej.notifmicros.notification.NotificationService;
 
 import java.util.HashSet;
-import java.util.List;
 
 @Profile("dbinit")
 @Component
@@ -38,7 +37,7 @@ public class NotificationInit {
             famousPeopleIds.add("" + i);
         }
         for (int j = 10; j < 1000; j++) {
-            notificationService.updateObservedUsersIds("" + j, famousPeopleIds);
+            notificationService.updateObservedUserIds("" + j, famousPeopleIds);
         }
     }
 
