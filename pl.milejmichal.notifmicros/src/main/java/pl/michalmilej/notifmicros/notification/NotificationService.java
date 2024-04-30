@@ -5,7 +5,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import pl.michalmilej.notifmicros.notification.request.NewPostCommentNotificationRequest;
 import pl.michalmilej.notifmicros.notification.request.NewPostNotificationRequest;
+import pl.michalmilej.notifmicros.notification.request.NotificationRequest;
+import pl.michalmilej.notifmicros.notification.request.UpdateObservedUserIdsRequest;
 
+import java.util.Arrays;
 import java.util.HashSet;
 
 @Service
@@ -13,6 +16,10 @@ import java.util.HashSet;
 public class NotificationService {
 
     final NotificationRepository notificationRepository;
+
+    public Notification addNotification(NotificationRequest notificationRequest) {
+        return notificationRepository.save(new Notification(notificationRequest.getUserId()));
+    }
 
     public ResponseEntity<Void> addNewPostNotification(NewPostNotificationRequest request) {
         var userId = request.getAuthorId();
@@ -24,12 +31,12 @@ public class NotificationService {
         return ResponseEntity.status(201).build();
     }
 
-    public ResponseEntity<Notification> updateObservedUserIds(String userId, HashSet<String> observedUserIds) {
+    public ResponseEntity<Notification> updateObservedUserIds(String userId, UpdateObservedUserIdsRequest request) {
         var notification = notificationRepository.findById(userId);
         if (notification.isEmpty()) {
             return ResponseEntity.notFound().build();
         }
-        notification.get().setObservedUserIds(observedUserIds);
+        notification.get().setObservedUserIds(new HashSet<>(Arrays.asList(request.getObservedUserIds())));
         var savedNotification = notificationRepository.save(notification.get());
         return ResponseEntity.ok(savedNotification);
     }

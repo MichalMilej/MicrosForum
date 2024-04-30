@@ -3,6 +3,11 @@ package pl.milejmichal.usersmicros.user;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import pl.milejmichal.usersmicros.communication.NotifMicrosCommunication;
+import pl.milejmichal.usersmicros.user.request.AddUserRequest;
+import pl.milejmichal.usersmicros.user.request.NewPostIdRequest;
+import pl.milejmichal.usersmicros.user.request.AddNotificationRequest;
+import pl.milejmichal.usersmicros.user.request.UpdateObservedUserIdsRequest;
 
 import java.util.HashSet;
 
@@ -11,10 +16,27 @@ import java.util.HashSet;
 public class UserService {
     final UserRepository userRepository;
 
-    public User addUser(String username) throws IllegalArgumentException {
-        if (userRepository.findByUsername(username).isPresent())
-            throw new IllegalArgumentException("Username already exists!");
-        return userRepository.save(new User(username));
+    final NotifMicrosCommunication notifMicrosCommunication;
+
+    //final WebClient webClientPostsMicros = WebClient.create("http://localhost:8081/microsforum/postsmicros");
+
+    public ResponseEntity<User> addUser(AddUserRequest addUserRequest) {
+        if (userRepository.findByUsername(addUserRequest.getUsername()).isPresent())
+            return ResponseEntity.status(409).build();
+        var savedUser = userRepository.save(new User(addUserRequest.getUsername()));
+
+        notifMicrosCommunication.addNotification(new AddNotificationRequest(savedUser.getId()));
+
+        return ResponseEntity.status(201).body(savedUser);
+    }
+
+    public User addUser(String userId, String username) throws IllegalArgumentException {
+        User user = new User(username);
+        user.setId(userId);
+        var savedUser = userRepository.save(user);
+
+        notifMicrosCommunication.addNotification(new AddNotificationRequest(savedUser.getId()));
+        return savedUser;
     }
 
     public User addObservedUserIds(String userId, HashSet<String> userIdsToObserve) throws IllegalArgumentException {
@@ -26,11 +48,26 @@ public class UserService {
                 user.get().getObservedUserIds().add(userIdToObserve);
             }
         }
-        return userRepository.save(user.get());
+        var savedUser = userRepository.save(user.get());
+
+        String[] observedUserIds = savedUser.getObservedUserIds().toArray(new String[0]);
+        notifMicrosCommunication.updateObservedUserIds(savedUser.getId(), new UpdateObservedUserIdsRequest(observedUserIds));
+
+        return savedUser;
     }
 
     public ResponseEntity<User> getUser(String userId) {
         var user = userRepository.findById(userId);
         return user.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
+    }
+
+    public ResponseEntity<User> addNewPostId(String userId, NewPostIdRequest newPostIdRequest) {
+        var user = userRepository.findById(userId);
+        if (user.isEmpty()) {
+            return ResponseEntity.notFound().build();
+        }
+        user.get().getNewPostIds().add(newPostIdRequest.getPostId());
+        var savedUser = userRepository.save(user.get());
+        return ResponseEntity.ok(savedUser);
     }
 }
