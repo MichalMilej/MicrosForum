@@ -1,4 +1,4 @@
-package pl.milejmichal.postsmicros.post;
+package pl.milejmichal.postsmicros.post.request;
 
 import lombok.Data;
 

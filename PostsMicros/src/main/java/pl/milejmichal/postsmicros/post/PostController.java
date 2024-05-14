@@ -1,26 +1,20 @@
 package pl.milejmichal.postsmicros.post;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
-import pl.milejmichal.postsmicros.post.comment.CommentRequest;
+import org.springframework.graphql.data.method.annotation.Argument;
+import org.springframework.graphql.data.method.annotation.QueryMapping;
+import org.springframework.stereotype.Controller;
 
-@RestController
-@RequestMapping("/posts")
+import java.util.List;
+
+@Controller
 @RequiredArgsConstructor
 public class PostController {
 
-    final PostService postService;
+    final PostRepository postRepository;
 
-    @ResponseStatus(HttpStatus.CREATED)
-    @PostMapping
-    Post addPost(@RequestBody PostRequest postRequest) {
-        return postService.addPost(postRequest.getUserId(), postRequest.getText());
-    }
-
-    @PostMapping("/{postId}/comments")
-    ResponseEntity<Post> addComment(@PathVariable String postId, @RequestBody CommentRequest commentRequest) {
-        return postService.addComment(postId, commentRequest.getUserId(), commentRequest.getText());
+    @QueryMapping
+    public List<Post> getUserPosts(@Argument String userId) {
+        return postRepository.findAllByUserId(userId);
     }
 }

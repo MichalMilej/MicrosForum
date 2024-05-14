@@ -4,7 +4,10 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import pl.milejmichal.postsmicros.post.comment.Comment;
+import pl.milejmichal.postsmicros.post.request.PostRequest;
 
+import java.awt.desktop.PreferencesEvent;
+import java.util.List;
 import java.util.UUID;
 
 @Service
@@ -13,10 +16,10 @@ public class PostService {
     
     final PostRepository postRepository;
 
-    public Post addPost(String userId, String text) {
+    public Post addPost(PostRequest postRequest) {
         Post post = new Post();
-        post.setUserId(userId);
-        post.setText(text);
+        post.setUserId(postRequest.getUserId());
+        post.setText(postRequest.getText());
         return postRepository.save(post);
     }
 
@@ -35,5 +38,9 @@ public class PostService {
         comment.setText(text);
         post.get().getComments().add(comment);
         return ResponseEntity.ok(postRepository.save(post.get()));
+    }
+
+    public List<Post> getUserPosts(String userId) {
+        return postRepository.findAllByUserId(userId);
     }
 }
