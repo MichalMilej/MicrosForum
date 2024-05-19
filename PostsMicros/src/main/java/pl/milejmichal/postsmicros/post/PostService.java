@@ -4,9 +4,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import pl.milejmichal.postsmicros.post.comment.Comment;
-import pl.milejmichal.postsmicros.post.request.PostRequest;
+import pl.milejmichal.postsmicros.post.comment.CommentRequest;
 
-import java.awt.desktop.PreferencesEvent;
 import java.util.List;
 import java.util.UUID;
 
@@ -28,19 +27,23 @@ public class PostService {
         return post.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
     }
 
-    public ResponseEntity<Post> addComment(String postId, String userId, String text) {
+    public ResponseEntity<Post> addComment(String postId, CommentRequest commentRequest) {
         var post = postRepository.findById(postId);
         if (post.isEmpty())
             return ResponseEntity.notFound().build();
         Comment comment = new Comment();
         comment.setId(UUID.randomUUID().toString());
-        comment.setUserId(userId);
-        comment.setText(text);
+        comment.setUserId(commentRequest.getUserId());
+        comment.setText(commentRequest.getText());
         post.get().getComments().add(comment);
         return ResponseEntity.ok(postRepository.save(post.get()));
     }
 
     public List<Post> getUserPosts(String userId) {
         return postRepository.findAllByUserId(userId);
+    }
+
+    public List<Post> getPostsByIds(List<String> ids) {
+        return postRepository.findByIdIn(ids);
     }
 }

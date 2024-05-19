@@ -4,12 +4,16 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import pl.milejmichal.usersmicros.communication.NotifMicrosCommunication;
+import pl.milejmichal.usersmicros.communication.PostMicrosCommunication;
+import pl.milejmichal.usersmicros.post.Post;
 import pl.milejmichal.usersmicros.user.request.AddUserRequest;
 import pl.milejmichal.usersmicros.user.request.NewPostIdRequest;
 import pl.milejmichal.usersmicros.user.request.AddNotificationRequest;
 import pl.milejmichal.usersmicros.user.request.UpdateObservedUserIdsRequest;
+import reactor.core.publisher.Mono;
 
 import java.util.HashSet;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -17,8 +21,8 @@ public class UserService {
     final UserRepository userRepository;
 
     final NotifMicrosCommunication notifMicrosCommunication;
+    final PostMicrosCommunication postMicrosCommunication;
 
-    //final WebClient webClientPostsMicros = WebClient.create("http://localhost:8081/microsforum/postsmicros");
 
     public ResponseEntity<User> addUser(AddUserRequest addUserRequest) {
         if (userRepository.findByUsername(addUserRequest.getUsername()).isPresent())
@@ -69,5 +73,14 @@ public class UserService {
         user.get().getNewPostIds().add(newPostIdRequest.getPostId());
         var savedUser = userRepository.save(user.get());
         return ResponseEntity.ok(savedUser);
+    }
+
+    public ResponseEntity<List<Post>> getNewPosts(String userId) {
+        var user = userRepository.findById(userId);
+        if (user.isEmpty()) {
+            return ResponseEntity.notFound().build();
+        }
+        List<Post> posts = postMicrosCommunication.getPosts(user.get().getNewPostIds());
+        return ResponseEntity.ok(posts);
     }
 }

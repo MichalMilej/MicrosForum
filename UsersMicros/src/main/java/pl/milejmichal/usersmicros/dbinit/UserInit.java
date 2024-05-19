@@ -12,10 +12,10 @@ import pl.milejmichal.usersmicros.user.UserRepository;
 import pl.milejmichal.usersmicros.user.UserService;
 import pl.milejmichal.usersmicros.user.request.AddNotificationRequest;
 import pl.milejmichal.usersmicros.user.request.UpdateObservedUserIdsRequest;
-import reactor.core.publisher.Mono;
 
 import java.util.HashSet;
 import java.util.LinkedList;
+import java.util.List;
 
 @Component
 @RequiredArgsConstructor
@@ -37,7 +37,13 @@ public class UserInit {
     public void initUsers() {
         // Create users
         for (int i = 0; i < usersNumber; i++) {
-            userService.addUser("" + i, "user" + i);
+            User user = userService.addUser("" + i, "user" + i);
+            // Add ids of new posts
+            if (i < 15)
+                user.getNewPostIds().addAll(List.of("0", "1", "2"));
+            else if (i < 100)
+                user.getNewPostIds().addAll(List.of("3", "4", "5"));
+            userRepository.save(user);
         }
 
         // Add observed users

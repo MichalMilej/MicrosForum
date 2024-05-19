@@ -26,4 +26,9 @@ public class Post {
         this.userId = userId;
         this.text = text;
     }
+
+    public Post(String id, String userId, String text) {
+        this(userId, text);
+        this.id = id;
+    }
 }

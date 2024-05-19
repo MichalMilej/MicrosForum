@@ -1,5 +1,7 @@
 type Query {
     getUserPosts(userId: String!) : [Post]
+    getPost(id: ID!) : Post
+    getPostsByIds(ids: [ID!]!) : [Post]
 }
 
 type Post {

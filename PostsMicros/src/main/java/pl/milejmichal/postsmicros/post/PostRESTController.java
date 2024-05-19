@@ -5,7 +5,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import pl.milejmichal.postsmicros.post.comment.CommentRequest;
-import pl.milejmichal.postsmicros.post.request.PostRequest;
 
 @RestController
 @RequestMapping("/posts")
@@ -22,6 +21,6 @@ public class PostRESTController {
 
     @PostMapping("/{postId}/comments")
     ResponseEntity<Post> addComment(@PathVariable String postId, @RequestBody CommentRequest commentRequest) {
-        return postService.addComment(postId, commentRequest.getUserId(), commentRequest.getText());
+        return postService.addComment(postId, commentRequest);
     }
 }
