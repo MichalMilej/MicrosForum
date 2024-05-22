@@ -2,7 +2,7 @@ package pl.milejmichal.usersmicros.communication.response;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
-import pl.milejmichal.usersmicros.post.Post;
+import pl.milejmichal.usersmicros.post.PostDTO;
 
 import java.util.List;
 
@@ -13,6 +13,6 @@ public class GetPostsByIdsResponse {
     @lombok.Data
     public static class Data {
         @JsonProperty("getPostsByIds")
-        private List<Post> posts;
+        private List<PostDTO> postDTOS;
     }
 }

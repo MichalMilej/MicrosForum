@@ -7,8 +7,11 @@ import pl.michalmilej.notifmicros.notification.request.NewPostCommentNotificatio
 import pl.michalmilej.notifmicros.notification.request.NewPostNotificationRequest;
 import pl.michalmilej.notifmicros.notification.request.NotificationRequest;
 import pl.michalmilej.notifmicros.notification.request.UpdateObservedUserIdsRequest;
+import pl.michalmilej.notifmicros.user.UserClient;
+import pl.michalmilej.notifmicros.user.UserDTO;
 
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.HashSet;
 
 @Service
@@ -16,6 +19,7 @@ import java.util.HashSet;
 public class NotificationService {
 
     final NotificationRepository notificationRepository;
+    final UserClient userClient;
 
     public Notification addNotification(NotificationRequest notificationRequest) {
         return notificationRepository.save(new Notification(notificationRequest.getUserId()));
@@ -55,5 +59,17 @@ public class NotificationService {
         }
         notificationRepository.save(userNotification.get());
         return ResponseEntity.status(201).build();
+    }
+
+    public UserDTO getUserDetails(String userId) {
+        var userResponse = userClient.getUser(userId);
+        return UserDTO.builder()
+                .id(userResponse.getId())
+                .username(userResponse.getUsername())
+                .email(userResponse.getEmail())
+                .observedUserIds(new HashSet<>(userResponse.getObservedUserIdsList()))
+                .newPostIds(new HashSet<>(userResponse.getNewPostIdsList()))
+                .postNewCommentIds(new HashMap<>(userResponse.getPostNewCommentIdsMap()))
+                .build();
     }
 }

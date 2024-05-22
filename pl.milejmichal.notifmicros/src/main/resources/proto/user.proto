@@ -1,0 +1,20 @@
+syntax = "proto3";
+
+package user;
+
+service UserService {
+  rpc GetUser(GetUserRequest) returns (GetUserResponse);
+}
+
+message GetUserRequest {
+  string id = 1;
+}
+
+message GetUserResponse {
+  string id = 1;
+  string username = 2;
+  string email = 3;
+  repeated string observed_user_ids = 4;
+  repeated string new_post_ids = 5;
+  map<string, string> post_new_comment_ids = 6;
+}

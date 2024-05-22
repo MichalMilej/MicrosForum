@@ -5,12 +5,11 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import pl.milejmichal.usersmicros.communication.NotifMicrosCommunication;
 import pl.milejmichal.usersmicros.communication.PostMicrosCommunication;
-import pl.milejmichal.usersmicros.post.Post;
+import pl.milejmichal.usersmicros.post.PostDTO;
 import pl.milejmichal.usersmicros.user.request.AddUserRequest;
 import pl.milejmichal.usersmicros.user.request.NewPostIdRequest;
 import pl.milejmichal.usersmicros.user.request.AddNotificationRequest;
 import pl.milejmichal.usersmicros.user.request.UpdateObservedUserIdsRequest;
-import reactor.core.publisher.Mono;
 
 import java.util.HashSet;
 import java.util.List;
@@ -37,6 +36,16 @@ public class UserService {
     public User addUser(String userId, String username) throws IllegalArgumentException {
         User user = new User(username);
         user.setId(userId);
+        var savedUser = userRepository.save(user);
+
+        notifMicrosCommunication.addNotification(new AddNotificationRequest(savedUser.getId()));
+        return savedUser;
+    }
+
+    public User addUser(String userId, String username, String email) throws IllegalArgumentException {
+        User user = new User(username);
+        user.setId(userId);
+        user.setEmail(email);
         var savedUser = userRepository.save(user);
 
         notifMicrosCommunication.addNotification(new AddNotificationRequest(savedUser.getId()));
@@ -75,12 +84,12 @@ public class UserService {
         return ResponseEntity.ok(savedUser);
     }
 
-    public ResponseEntity<List<Post>> getNewPosts(String userId) {
+    public ResponseEntity<List<PostDTO>> getNewPosts(String userId) {
         var user = userRepository.findById(userId);
         if (user.isEmpty()) {
             return ResponseEntity.notFound().build();
         }
-        List<Post> posts = postMicrosCommunication.getPosts(user.get().getNewPostIds());
-        return ResponseEntity.ok(posts);
+        List<PostDTO> postDTOS = postMicrosCommunication.getPosts(user.get().getNewPostIds());
+        return ResponseEntity.ok(postDTOS);
     }
 }

@@ -9,6 +9,8 @@ import pl.michalmilej.notifmicros.notification.request.NewPostCommentNotificatio
 import pl.michalmilej.notifmicros.notification.request.NewPostNotificationRequest;
 import pl.michalmilej.notifmicros.notification.request.NotificationRequest;
 import pl.michalmilej.notifmicros.notification.request.UpdateObservedUserIdsRequest;
+import pl.michalmilej.notifmicros.user.UserClient;
+import pl.michalmilej.notifmicros.user.UserDTO;
 
 @RestController
 @RequestMapping("/notifications")
@@ -38,5 +40,10 @@ public class NotificationController {
     public ResponseEntity<Notification> updateObservedUserIds(@PathVariable String userId,
                                                               @RequestBody UpdateObservedUserIdsRequest request) {
         return notificationService.updateObservedUserIds(userId, request);
+    }
+
+    @GetMapping("/{userId}/user-details")
+    public UserDTO getUserDetails(@PathVariable String userId) {
+        return notificationService.getUserDetails(userId);
     }
 }

@@ -3,7 +3,7 @@ package pl.milejmichal.usersmicros.user;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import pl.milejmichal.usersmicros.post.Post;
+import pl.milejmichal.usersmicros.post.PostDTO;
 import pl.milejmichal.usersmicros.user.request.NewPostIdRequest;
 import pl.milejmichal.usersmicros.user.request.AddUserRequest;
 
@@ -31,7 +31,7 @@ public class UserController {
     }
 
     @GetMapping("/{userId}/newPostIds")
-    public ResponseEntity<List<Post>> getNewPosts(@PathVariable String userId) {
+    public ResponseEntity<List<PostDTO>> getNewPosts(@PathVariable String userId) {
         return userService.getNewPosts(userId);
     }
 }

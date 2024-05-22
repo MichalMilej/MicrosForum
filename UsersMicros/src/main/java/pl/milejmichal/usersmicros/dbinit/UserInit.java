@@ -37,7 +37,7 @@ public class UserInit {
     public void initUsers() {
         // Create users
         for (int i = 0; i < usersNumber; i++) {
-            User user = userService.addUser("" + i, "user" + i);
+            User user = userService.addUser("" + i, "user" + i, "user" + i + "@mail.com");
             // Add ids of new posts
             if (i < 15)
                 user.getNewPostIds().addAll(List.of("0", "1", "2"));

@@ -1,11 +1,9 @@
 package pl.milejmichal.usersmicros.communication;
 
-import graphql.kickstart.execution.GraphQLRequest;
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.client.WebClient;
 import pl.milejmichal.usersmicros.communication.response.GetPostsByIdsResponse;
-import pl.milejmichal.usersmicros.post.Post;
-import reactor.core.publisher.Mono;
+import pl.milejmichal.usersmicros.post.PostDTO;
 
 import java.util.HashSet;
 import java.util.List;
@@ -17,7 +15,7 @@ public class PostMicrosCommunication {
     final WebClient webClientPostsMicros = WebClient.create("http://localhost:8081/microsforum/postsmicros");
 
 
-    public List<Post> getPosts(HashSet<String> postIds) {
+    public List<PostDTO> getPosts(HashSet<String> postIds) {
         String query = """
                 query getPostsByIds($ids: [ID!]!) {
                     getPostsByIds(ids: $ids) {
@@ -45,6 +43,6 @@ public class PostMicrosCommunication {
                 .bodyToMono(GetPostsByIdsResponse.class)
                 .block();
 
-        return getPostByIdsResponse.getData().getPosts();
+        return getPostByIdsResponse.getData().getPostDTOS();
     }
 }

@@ -6,7 +6,7 @@ import pl.milejmichal.usersmicros.post.comment.Comment;
 import java.util.LinkedList;
 
 @Data
-public class Post {
+public class PostDTO {
 
     private String id;
 
