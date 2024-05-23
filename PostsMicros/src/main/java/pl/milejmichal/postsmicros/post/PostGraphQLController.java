@@ -10,7 +10,7 @@ import java.util.Optional;
 
 @Controller
 @RequiredArgsConstructor
-public class PostController {
+public class PostGraphQLController {
 
     final PostRepository postRepository;
 

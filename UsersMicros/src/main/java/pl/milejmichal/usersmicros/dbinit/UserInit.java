@@ -26,7 +26,6 @@ public class UserInit {
 
     final NotifMicrosCommunication notifMicrosCommunication;
 
-    final int usersNumber = 1000;
 
     @PostConstruct
     public void clear() {
@@ -36,7 +35,7 @@ public class UserInit {
     @Bean
     public void initUsers() {
         // Create users
-        for (int i = 0; i < usersNumber; i++) {
+        for (int i = 0; i < 1000; i++) {
             User user = userService.addUser("" + i, "user" + i, "user" + i + "@mail.com");
             // Add ids of new posts
             if (i < 15)
@@ -47,13 +46,17 @@ public class UserInit {
         }
 
         // Add observed users
-        // 1-10 famous people, everybody watches them
+        // 1-5 famous people, everybody watches them
         HashSet<String> famousPeople = new HashSet<>();
-        for (int i = 0; i < 10; i++) {
+        for (int i = 0; i < 5; i++) {
             famousPeople.add("" + i);
         }
-        for (int i = 10; i < usersNumber; i++) {
+        for (int i = 5; i < 1000; i++) {
             userService.addObservedUserIds("" + i, famousPeople);
+        }
+
+        for (int i = 5; i < 500; i++) {
+            userService.addObservedUserIds("" + i, new HashSet<>(List.of("" + (i+1), "" + (i+2), "" + (i+2))));
         }
 
         sendDataToNotifMicros();

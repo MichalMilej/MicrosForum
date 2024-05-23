@@ -28,6 +28,9 @@ dependencies {
 	// GraphQL
 	implementation 'org.springframework.boot:spring-boot-starter-graphql'
 
+	// WebSocket
+	implementation 'org.springframework.boot:spring-boot-starter-websocket'
+
 	compileOnly 'org.projectlombok:lombok'
 	annotationProcessor 'org.projectlombok:lombok'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'

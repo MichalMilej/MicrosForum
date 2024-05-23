@@ -9,13 +9,12 @@ import pl.michalmilej.notifmicros.notification.request.NewPostCommentNotificatio
 import pl.michalmilej.notifmicros.notification.request.NewPostNotificationRequest;
 import pl.michalmilej.notifmicros.notification.request.NotificationRequest;
 import pl.michalmilej.notifmicros.notification.request.UpdateObservedUserIdsRequest;
-import pl.michalmilej.notifmicros.user.UserClient;
 import pl.michalmilej.notifmicros.user.UserDTO;
 
 @RestController
 @RequestMapping("/notifications")
 @RequiredArgsConstructor
-public class NotificationController {
+public class NotificationRESTController {
 
     final NotificationService notificationService;
 
