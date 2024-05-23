@@ -38,10 +38,10 @@ public class UserInit {
         for (int i = 0; i < 1000; i++) {
             User user = userService.addUser("" + i, "user" + i, "user" + i + "@mail.com");
             // Add ids of new posts
-            if (i < 15)
+            /*if (i < 15)
                 user.getNewPostIds().addAll(List.of("0", "1", "2"));
             else if (i < 100)
-                user.getNewPostIds().addAll(List.of("3", "4", "5"));
+                user.getNewPostIds().addAll(List.of("3", "4", "5"));*/
             userRepository.save(user);
         }
 
