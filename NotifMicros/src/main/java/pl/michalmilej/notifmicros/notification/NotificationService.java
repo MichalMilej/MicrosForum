@@ -3,6 +3,7 @@ package pl.michalmilej.notifmicros.notification;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import pl.michalmilej.notifmicros.notification.rabbitmq.RabbitMQNotificationService;
 import pl.michalmilej.notifmicros.notification.request.NewPostCommentNotificationRequest;
 import pl.michalmilej.notifmicros.notification.request.NewPostNotificationRequest;
 import pl.michalmilej.notifmicros.notification.request.NotificationRequest;
@@ -21,6 +22,8 @@ public class NotificationService {
     final NotificationRepository notificationRepository;
     final UserClient userClient;
 
+    final RabbitMQNotificationService rabbitMQNotificationService;
+
     public Notification addNotification(NotificationRequest notificationRequest) {
         return notificationRepository.save(new Notification(notificationRequest.getUserId()));
     }
@@ -32,6 +35,9 @@ public class NotificationService {
                 userNotification -> userNotification.getObservedUserIds().contains(userId)).toList();
         interestedUsers.forEach(userNotification -> userNotification.getNewPostIds().add(postId));
         notificationRepository.saveAll(interestedUsers);
+
+        rabbitMQNotificationService.addNewPostIdsToQueue();
+
         return ResponseEntity.status(201).build();
     }
 
