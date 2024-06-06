@@ -4,7 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.stereotype.Component;
 import pl.milejmichal.usersmicros.user.UserService;
-import pl.milejmichal.usersmicros.user.request.NewPostIdRequest;
+import pl.milejmichal.usersmicros.user.request.AddPostIdRequest;
 
 @Component
 @RequiredArgsConstructor
@@ -19,7 +19,7 @@ public class NewPostIdMessageReceiver {
             String userId = parts[0];
             String postId = parts[1];
             System.out.println("Received new post id notification with userId: " + userId + " and postId: " + postId);
-            userService.addNewPostId(userId, new NewPostIdRequest(postId));
+            userService.addNewPostId(userId, new AddPostIdRequest(postId));
         } else {
             System.err.println("Invalid message format: " + message);
         }

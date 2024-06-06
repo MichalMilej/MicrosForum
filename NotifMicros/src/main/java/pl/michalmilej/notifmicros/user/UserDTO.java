@@ -19,5 +19,5 @@ public class UserDTO {
 
     private HashSet<String> newPostIds;
 
-    private HashMap<String, String> postNewCommentIds;
+    private HashMap<String, String> newPostCommentIds;
 }

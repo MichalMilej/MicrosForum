@@ -23,7 +23,7 @@ public class User {
 
     private HashSet<String> observedUserIds = new HashSet<>();
     private HashSet<String> newPostIds = new HashSet<>();
-    private HashMap<String, String> postNewCommentIds = new HashMap<>();
+    private HashMap<String, String> newPostCommentIds = new HashMap<>();
 
     public User(String username) {
         this.username = username;

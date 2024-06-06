@@ -8,7 +8,7 @@ import org.springframework.data.annotation.Id;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class Comment {
+public class PostComment {
     @Id
     private String id;
 

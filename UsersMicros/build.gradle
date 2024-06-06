@@ -30,14 +30,12 @@ dependencies {
 
     // GraphQL
     implementation 'com.graphql-java-kickstart:graphql-spring-boot-starter:15.1.0'
-
     // gRPC
     implementation 'io.grpc:grpc-netty-shaded:1.34.1'
     implementation 'io.grpc:grpc-protobuf:1.34.1'
     implementation 'io.grpc:grpc-stub:1.34.1'
     implementation 'com.google.protobuf:protobuf-java:3.14.0'
     implementation 'javax.annotation:javax.annotation-api:1.3.2'
-
     // RabbitMQ
     implementation 'org.springframework.boot:spring-boot-starter-amqp'
 

@@ -5,9 +5,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import pl.michalmilej.notifmicros.notification.request.NewPostCommentNotificationRequest;
-import pl.michalmilej.notifmicros.notification.request.NewPostNotificationRequest;
-import pl.michalmilej.notifmicros.notification.request.NotificationRequest;
+import pl.michalmilej.notifmicros.notification.request.AddPostCommentNotificationRequest;
+import pl.michalmilej.notifmicros.notification.request.AddPostNotificationRequest;
+import pl.michalmilej.notifmicros.notification.request.AddNotificationRequest;
 import pl.michalmilej.notifmicros.notification.request.UpdateObservedUserIdsRequest;
 import pl.michalmilej.notifmicros.user.UserDTO;
 
@@ -20,19 +20,19 @@ public class NotificationRESTController {
 
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping
-    public Notification addNotification(@RequestBody NotificationRequest notificationRequest) {
-        return notificationService.addNotification(notificationRequest);
+    public Notification addNotification(@RequestBody AddNotificationRequest addNotificationRequest) {
+        return notificationService.addNotification(addNotificationRequest);
     }
 
     @PostMapping("/posts")
-    public ResponseEntity<Void> addNewPostNotification(@RequestBody NewPostNotificationRequest request) {
-        return notificationService.addNewPostNotification(request);
+    public ResponseEntity<Void> addPostNotification(@RequestBody AddPostNotificationRequest request) {
+        return notificationService.addPostNotification(request);
     }
 
     @PostMapping("/posts/{postId}/comments")
-    public ResponseEntity<Void> addPostNewCommentNotification(@PathVariable String postId,
-                                                              @RequestBody NewPostCommentNotificationRequest request) {
-        return notificationService.addPostNewCommentNotification(postId, request);
+    public ResponseEntity<Void> addPostCommentNotification(@PathVariable String postId,
+                                                           @RequestBody AddPostCommentNotificationRequest request) {
+        return notificationService.addPostCommentNotification(postId, request);
     }
 
     @PatchMapping("/{userId}/observed-user-ids")

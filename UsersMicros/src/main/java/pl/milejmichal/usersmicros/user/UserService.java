@@ -7,7 +7,7 @@ import pl.milejmichal.usersmicros.communication.NotifMicrosCommunication;
 import pl.milejmichal.usersmicros.communication.PostMicrosCommunication;
 import pl.milejmichal.usersmicros.post.PostDTO;
 import pl.milejmichal.usersmicros.user.request.AddUserRequest;
-import pl.milejmichal.usersmicros.user.request.NewPostIdRequest;
+import pl.milejmichal.usersmicros.user.request.AddPostIdRequest;
 import pl.milejmichal.usersmicros.user.request.AddNotificationRequest;
 import pl.milejmichal.usersmicros.user.request.UpdateObservedUserIdsRequest;
 
@@ -74,12 +74,12 @@ public class UserService {
         return user.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
     }
 
-    public ResponseEntity<User> addNewPostId(String userId, NewPostIdRequest newPostIdRequest) {
+    public ResponseEntity<User> addNewPostId(String userId, AddPostIdRequest addPostIdRequest) {
         var user = userRepository.findById(userId);
         if (user.isEmpty()) {
             return ResponseEntity.notFound().build();
         }
-        user.get().getNewPostIds().add(newPostIdRequest.getPostId());
+        user.get().getNewPostIds().add(addPostIdRequest.getPostId());
         var savedUser = userRepository.save(user.get());
         return ResponseEntity.ok(savedUser);
     }

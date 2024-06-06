@@ -23,7 +23,7 @@ public class UserServiceGRPCImpl extends UserServiceGrpc.UserServiceImplBase {
                     .setEmail(user.getEmail())
                     .addAllObservedUserIds(user.getObservedUserIds())
                     .addAllNewPostIds(user.getNewPostIds())
-                    .putAllPostNewCommentIds(user.getPostNewCommentIds())
+                    .putAllPostNewCommentIds(user.getNewPostCommentIds())
                     .build();
             responseObserver.onNext(getUserResponse);
         } else {

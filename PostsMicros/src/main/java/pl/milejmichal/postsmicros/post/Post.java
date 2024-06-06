@@ -4,7 +4,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
-import pl.milejmichal.postsmicros.post.comment.Comment;
+import pl.milejmichal.postsmicros.post.comment.PostComment;
 
 import java.util.LinkedList;
 
@@ -20,7 +20,7 @@ public class Post {
     
     private String text;
 
-    private LinkedList<Comment> comments = new LinkedList<>();
+    private LinkedList<PostComment> postComments = new LinkedList<>();
 
     public Post(String userId, String text) {
         this.userId = userId;

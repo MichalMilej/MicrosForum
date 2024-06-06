@@ -8,8 +8,7 @@ import org.springframework.stereotype.Component;
 import pl.milejmichal.postsmicros.post.Post;
 import pl.milejmichal.postsmicros.post.PostRepository;
 import pl.milejmichal.postsmicros.post.PostService;
-import pl.milejmichal.postsmicros.post.comment.Comment;
-import pl.milejmichal.postsmicros.post.comment.CommentRequest;
+import pl.milejmichal.postsmicros.post.comment.PostComment;
 
 @Component
 @RequiredArgsConstructor
@@ -30,13 +29,13 @@ public class PostInit {
             var savedPost = postRepository.save(post);
 
             if (i % 5 == 0) {
-                Comment comment = new Comment("" + j++, "" + (i+1), "Comment 1");
-                savedPost.getComments().add(comment);
+                PostComment postComment = new PostComment("" + j++, "" + (i+1), "Comment 1");
+                savedPost.getPostComments().add(postComment);
                 savedPost = postRepository.save(savedPost);
             }
             if (i % 10 == 0) {
-                Comment comment = new Comment("" + j++, "" + (i+2), "Comment 2");
-                savedPost.getComments().add(comment);
+                PostComment postComment = new PostComment("" + j++, "" + (i+2), "Comment 2");
+                savedPost.getPostComments().add(postComment);
                 postRepository.save(savedPost);
             }
 

@@ -2,7 +2,6 @@ package pl.michalmilej.notifmicros.notification.rabbitmq;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 import pl.michalmilej.notifmicros.notification.Notification;
 import pl.michalmilej.notifmicros.notification.NotificationRepository;
@@ -12,7 +11,7 @@ import java.util.List;
 
 @Component
 @RequiredArgsConstructor
-public class RabbitMQNotificationService {
+public class RabbitMQSenderService {
 
     final NotificationRepository notificationRepository;
     final RabbitTemplate rabbitTemplate;

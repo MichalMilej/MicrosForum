@@ -1,11 +1,12 @@
 package pl.milejmichal.postsmicros.post;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import pl.milejmichal.postsmicros.post.comment.Comment;
-import pl.milejmichal.postsmicros.post.comment.CommentRequest;
+import pl.milejmichal.postsmicros.post.comment.PostComment;
+import pl.milejmichal.postsmicros.post.comment.AddPostCommentRequest;
+import pl.milejmichal.postsmicros.post.rabbitmq.RabbitMQSenderService;
 import pl.milejmichal.postsmicros.post.websocket.PostWebSocketHandler;
 
 import java.util.List;
@@ -19,10 +20,15 @@ public class PostService {
 
     final PostWebSocketHandler postWebSocketHandler;
 
-    public Post addPost(PostRequest postRequest) {
+    final RabbitTemplate rabbitTemplate;
+
+    final RabbitMQSenderService rabbitMQSenderService;
+
+
+    public Post addPost(AddPostRequest addPostRequest) {
         Post post = new Post();
-        post.setUserId(postRequest.getUserId());
-        post.setText(postRequest.getText());
+        post.setUserId(addPostRequest.getUserId());
+        post.setText(addPostRequest.getText());
         var savedPost = postRepository.save(post);
 
         // UserId:PostId
@@ -38,15 +44,18 @@ public class PostService {
         return post.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
     }
 
-    public ResponseEntity<Post> addComment(String postId, CommentRequest commentRequest) {
+    public ResponseEntity<Post> addPostComment(String postId, AddPostCommentRequest addPostCommentRequest) {
         var post = postRepository.findById(postId);
         if (post.isEmpty())
             return ResponseEntity.notFound().build();
-        Comment comment = new Comment();
-        comment.setId(UUID.randomUUID().toString());
-        comment.setUserId(commentRequest.getUserId());
-        comment.setText(commentRequest.getText());
-        post.get().getComments().add(comment);
+        PostComment postComment = new PostComment();
+        postComment.setId(UUID.randomUUID().toString());
+        postComment.setUserId(addPostCommentRequest.getUserId());
+        postComment.setText(addPostCommentRequest.getText());
+        post.get().getPostComments().add(postComment);
+
+        rabbitMQSenderService.publishNewPostCommentId(postId, post.get().getUserId(), postComment.getId());
+
         return ResponseEntity.ok(postRepository.save(post.get()));
     }
 

@@ -4,7 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import pl.milejmichal.usersmicros.post.PostDTO;
-import pl.milejmichal.usersmicros.user.request.NewPostIdRequest;
+import pl.milejmichal.usersmicros.user.request.AddPostIdRequest;
 import pl.milejmichal.usersmicros.user.request.AddUserRequest;
 
 import java.util.List;
@@ -26,8 +26,8 @@ public class UserController {
     }
 
     @PostMapping("/{userId}/newPostIds")
-    public ResponseEntity<User> addNewPostId(@PathVariable String userId, @RequestBody NewPostIdRequest newPostIdRequest) {
-        return userService.addNewPostId(userId, newPostIdRequest);
+    public ResponseEntity<User> addNewPostId(@PathVariable String userId, @RequestBody AddPostIdRequest addPostIdRequest) {
+        return userService.addNewPostId(userId, addPostIdRequest);
     }
 
     @GetMapping("/{userId}/newPostIds")

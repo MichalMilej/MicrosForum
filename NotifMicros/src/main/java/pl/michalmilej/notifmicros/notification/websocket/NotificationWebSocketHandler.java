@@ -8,7 +8,7 @@ import org.springframework.web.socket.TextMessage;
 import org.springframework.web.socket.WebSocketSession;
 import org.springframework.web.socket.handler.TextWebSocketHandler;
 import pl.michalmilej.notifmicros.notification.NotificationService;
-import pl.michalmilej.notifmicros.notification.request.NewPostNotificationRequest;
+import pl.michalmilej.notifmicros.notification.request.AddPostNotificationRequest;
 
 import java.io.IOException;
 
@@ -32,7 +32,7 @@ public class NotificationWebSocketHandler extends TextWebSocketHandler {
         if (parts.length == 2) {
             String authorId = parts[0];
             String postId = parts[1];
-            notificationService.addNewPostNotification(new NewPostNotificationRequest(authorId, postId));
+            notificationService.addPostNotification(new AddPostNotificationRequest(authorId, postId));
         } else {
             System.err.println("Invalid message format: " + payload);
         }
