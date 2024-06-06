@@ -9,12 +9,12 @@ import org.springframework.stereotype.Component;
 @RequiredArgsConstructor
 public class RabbitMQSenderService {
 
-    final TopicExchange newPostCommentIdsExchange;
+    final TopicExchange newCommentIdsExchange;
 
     final RabbitTemplate rabbitTemplate;
 
-    public void publishNewPostCommentId(String postId, String postAuthorId, String postCommentId) {
-        String message = postId + ":" + postAuthorId + ":" + postCommentId;
-        rabbitTemplate.convertAndSend(newPostCommentIdsExchange.getName(), "post.comment.created", message);
+    public void publishNewCommentId(String postId, String postAuthorId, String commentId) {
+        String message = postId + ":" + postAuthorId + ":" + commentId;
+        rabbitTemplate.convertAndSend(newCommentIdsExchange.getName(), "post.comment.created", message);
     }
 }

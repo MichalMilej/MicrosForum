@@ -11,8 +11,8 @@ import org.springframework.context.annotation.Configuration;
 public class RabbitMQConfig {
 
     public static final String NEW_POST_IDS_QUEUE = "newPostIdsQueue";
-    public static final String NEW_POST_COMMENT_IDS_EXCHANGE = "newPostCommentIdsExchange";
-    public static final String NEW_POST_COMMENT_IDS_QUEUE = "newPostCommentIdsQueue";
+    public static final String NEW_COMMENT_IDS_EXCHANGE = "newCommentIdsExchange";
+    public static final String NEW_COMMENT_IDS_QUEUE = "newCommentIdsQueue";
 
     @Bean
     public Queue newPostIdsQueue() {
@@ -20,17 +20,17 @@ public class RabbitMQConfig {
     }
 
     @Bean
-    public Queue newPostCommentIdsQueue() {
-        return new Queue(NEW_POST_COMMENT_IDS_QUEUE);
+    public Queue newCommentIdsQueue() {
+        return new Queue(NEW_COMMENT_IDS_QUEUE);
     }
 
     @Bean
-    public TopicExchange newPostCommentIdsExchange() {
-        return new TopicExchange(NEW_POST_COMMENT_IDS_EXCHANGE);
+    public TopicExchange newCommentIdsExchange() {
+        return new TopicExchange(NEW_COMMENT_IDS_EXCHANGE);
     }
 
     @Bean
-    public Binding binding(Queue newPostCommentIdsQueue, TopicExchange newPostCommentIdsExchange) {
-        return BindingBuilder.bind(newPostCommentIdsQueue).to(newPostCommentIdsExchange).with("post.comment.created");
+    public Binding binding(Queue newCommentIdsQueue, TopicExchange newCommentIdsExchange) {
+        return BindingBuilder.bind(newCommentIdsQueue).to(newCommentIdsExchange).with("post.comment.created");
     }
 }

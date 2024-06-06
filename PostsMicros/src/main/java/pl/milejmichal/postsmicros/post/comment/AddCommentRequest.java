@@ -5,7 +5,7 @@ import lombok.Data;
 
 @Data
 @AllArgsConstructor
-public class AddPostCommentRequest {
+public class AddCommentRequest {
     String userId;
     String text;
 }

@@ -6,17 +6,18 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import pl.michalmilej.notifmicros.notification.rabbitmq.RabbitMQConfig;
 import pl.michalmilej.notifmicros.notification.rabbitmq.RabbitMQSenderService;
-import pl.michalmilej.notifmicros.notification.request.AddPostCommentNotificationRequest;
-import pl.michalmilej.notifmicros.notification.request.AddPostNotificationRequest;
+import pl.michalmilej.notifmicros.notification.request.AddNewCommentIdNotificationRequest;
+import pl.michalmilej.notifmicros.notification.request.AddNewPostIdNotificationRequest;
 import pl.michalmilej.notifmicros.notification.request.AddNotificationRequest;
 import pl.michalmilej.notifmicros.notification.request.UpdateObservedUserIdsRequest;
-import pl.michalmilej.notifmicros.user.UserClient;
-import pl.michalmilej.notifmicros.user.UserDTO;
+import pl.michalmilej.notifmicros.grpc.UserClient;
+import pl.michalmilej.notifmicros.grpc.UserDTO;
+import user.User;
 
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.List;
+import java.util.concurrent.CompletableFuture;
 
 @Service
 @RequiredArgsConstructor
@@ -31,7 +32,7 @@ public class NotificationService {
         return notificationRepository.save(new Notification(addNotificationRequest.getUserId()));
     }
 
-    public ResponseEntity<Void> addPostNotification(AddPostNotificationRequest request) {
+    public ResponseEntity<Void> addPostNotification(AddNewPostIdNotificationRequest request) {
         var userId = request.getAuthorId();
         var postId = request.getPostId();
         var interestedUsers = notificationRepository.findAll().stream().filter(
@@ -54,19 +55,30 @@ public class NotificationService {
         return ResponseEntity.ok(savedNotification);
     }
 
-    public ResponseEntity<Void> addPostCommentNotification(String postId, AddPostCommentNotificationRequest request) {
+    public ResponseEntity<Void> addNewCommentIdNotification(String postId, AddNewCommentIdNotificationRequest request) {
         var userNotification = notificationRepository.findById(request.getPostAuthorId());
         if (userNotification.isEmpty()) {
             return ResponseEntity.notFound().build();
         }
-        var newPostCommentIds = userNotification.get().getNewPostCommentIds();
-        if (!newPostCommentIds.containsKey(postId)) {
-            newPostCommentIds.put(postId, new HashSet<>());
-            newPostCommentIds.get(postId).add(request.getCommentId());
+        var newCommentIds = userNotification.get().getNewCommentIds();
+        if (!newCommentIds.containsKey(postId)) {
+            newCommentIds.put(postId, new HashSet<>());
+            newCommentIds.get(postId).add(request.getCommentId());
         } else {
-            newPostCommentIds.get(postId).add(request.getCommentId());
+            newCommentIds.get(postId).add(request.getCommentId());
         }
         notificationRepository.save(userNotification.get());
+
+        // Send notification to UsersMicros
+        CompletableFuture<User.NotifyNewCommentIdResponse> futureResponse =
+                userClient.notifyNewPostCommentId(postId, request.getPostAuthorId(), request.getCommentId());
+        futureResponse.thenAccept(response -> {
+            if (response.getSuccess()) {
+                newCommentIds.get(postId).remove(request.getCommentId());
+                System.out.println("New Comment id: " + request.getCommentId() + " successfully delivered.");
+            }
+        });
+
         return ResponseEntity.status(201).build();
     }
 
@@ -76,21 +88,18 @@ public class NotificationService {
                 .id(userResponse.getId())
                 .username(userResponse.getUsername())
                 .email(userResponse.getEmail())
-                .observedUserIds(new HashSet<>(userResponse.getObservedUserIdsList()))
-                .newPostIds(new HashSet<>(userResponse.getNewPostIdsList()))
-                .newPostCommentIds(new HashMap<>(userResponse.getPostNewCommentIdsMap()))
                 .build();
     }
 
-    @RabbitListener(queues = RabbitMQConfig.NEW_POST_COMMENT_IDS_QUEUE)
-    public void receivePostNewCommentIdMessage(String message) {
+    @RabbitListener(queues = RabbitMQConfig.NEW_COMMENT_IDS_QUEUE)
+    public void receiveNewCommentIdMessage(String message) {
         String[] parts = message.split(":");
         if (parts.length == 3) {
             String postId = parts[0];
             String postAuthorId = parts[1];
             String commentId = parts[2];
-            System.out.println("Received new post commment id notification with postId: " + postId + " and commentId " + commentId);
-            addPostCommentNotification(postId, new AddPostCommentNotificationRequest(postAuthorId, commentId));
+            System.out.println("Received new comment id notification with postId: " + postId + " and commentId " + commentId);
+            addNewCommentIdNotification(postId, new AddNewCommentIdNotificationRequest(postAuthorId, commentId));
         } else {
             System.err.println("Invalid message format: " + message);
         }

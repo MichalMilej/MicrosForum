@@ -5,11 +5,11 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import pl.michalmilej.notifmicros.notification.request.AddPostCommentNotificationRequest;
-import pl.michalmilej.notifmicros.notification.request.AddPostNotificationRequest;
+import pl.michalmilej.notifmicros.notification.request.AddNewCommentIdNotificationRequest;
+import pl.michalmilej.notifmicros.notification.request.AddNewPostIdNotificationRequest;
 import pl.michalmilej.notifmicros.notification.request.AddNotificationRequest;
 import pl.michalmilej.notifmicros.notification.request.UpdateObservedUserIdsRequest;
-import pl.michalmilej.notifmicros.user.UserDTO;
+import pl.michalmilej.notifmicros.grpc.UserDTO;
 
 @RestController
 @RequestMapping("/notifications")
@@ -25,14 +25,14 @@ public class NotificationRESTController {
     }
 
     @PostMapping("/posts")
-    public ResponseEntity<Void> addPostNotification(@RequestBody AddPostNotificationRequest request) {
+    public ResponseEntity<Void> addNewPostIdNotification(@RequestBody AddNewPostIdNotificationRequest request) {
         return notificationService.addPostNotification(request);
     }
 
     @PostMapping("/posts/{postId}/comments")
-    public ResponseEntity<Void> addPostCommentNotification(@PathVariable String postId,
-                                                           @RequestBody AddPostCommentNotificationRequest request) {
-        return notificationService.addPostCommentNotification(postId, request);
+    public ResponseEntity<Void> addNewCommentIdNotification(@PathVariable String postId,
+                                                            @RequestBody AddNewCommentIdNotificationRequest request) {
+        return notificationService.addNewCommentIdNotification(postId, request);
     }
 
     @PatchMapping("/{userId}/observed-user-ids")

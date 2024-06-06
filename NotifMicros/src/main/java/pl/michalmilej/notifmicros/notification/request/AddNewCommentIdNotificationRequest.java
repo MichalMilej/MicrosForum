@@ -5,7 +5,7 @@ import lombok.Data;
 
 @Data
 @AllArgsConstructor
-public class AddPostNotificationRequest {
-    private String authorId;
-    private String postId;
+public class AddNewCommentIdNotificationRequest {
+    private String postAuthorId;
+    private String commentId;
 }

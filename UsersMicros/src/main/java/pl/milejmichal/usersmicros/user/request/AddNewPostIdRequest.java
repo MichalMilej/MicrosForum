@@ -5,6 +5,6 @@ import lombok.Data;
 
 @Data
 @AllArgsConstructor
-public class AddPostIdRequest {
+public class AddNewPostIdRequest {
     private String postId;
 }

@@ -55,7 +55,7 @@ public class UserInit {
             userService.addObservedUserIds("" + i, famousPeople);
         }
 
-        for (int i = 5; i < 500; i++) {
+        for (int i = 1; i < 500; i++) {
             userService.addObservedUserIds("" + i, new HashSet<>(List.of("" + (i+1), "" + (i+2), "" + (i+2))));
         }
 

@@ -8,7 +8,7 @@ import org.springframework.context.annotation.Configuration;
 public class RabbitMQConfig {
 
     @Bean
-    public TopicExchange newPostCommentIdsExchange() {
-        return new TopicExchange("newPostCommentIdsExchange");
+    public TopicExchange newCommentIdsExchange() {
+        return new TopicExchange("newCommentIdsExchange");
     }
 }

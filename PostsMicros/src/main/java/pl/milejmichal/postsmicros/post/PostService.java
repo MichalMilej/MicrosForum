@@ -4,8 +4,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import pl.milejmichal.postsmicros.post.comment.PostComment;
-import pl.milejmichal.postsmicros.post.comment.AddPostCommentRequest;
+import pl.milejmichal.postsmicros.post.comment.Comment;
+import pl.milejmichal.postsmicros.post.comment.AddCommentRequest;
 import pl.milejmichal.postsmicros.post.rabbitmq.RabbitMQSenderService;
 import pl.milejmichal.postsmicros.post.websocket.PostWebSocketHandler;
 
@@ -44,17 +44,17 @@ public class PostService {
         return post.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
     }
 
-    public ResponseEntity<Post> addPostComment(String postId, AddPostCommentRequest addPostCommentRequest) {
+    public ResponseEntity<Post> addComment(String postId, AddCommentRequest addCommentRequest) {
         var post = postRepository.findById(postId);
         if (post.isEmpty())
             return ResponseEntity.notFound().build();
-        PostComment postComment = new PostComment();
-        postComment.setId(UUID.randomUUID().toString());
-        postComment.setUserId(addPostCommentRequest.getUserId());
-        postComment.setText(addPostCommentRequest.getText());
-        post.get().getPostComments().add(postComment);
+        Comment comment = new Comment();
+        comment.setId(UUID.randomUUID().toString());
+        comment.setUserId(addCommentRequest.getUserId());
+        comment.setText(addCommentRequest.getText());
+        post.get().getComments().add(comment);
 
-        rabbitMQSenderService.publishNewPostCommentId(postId, post.get().getUserId(), postComment.getId());
+        rabbitMQSenderService.publishNewCommentId(postId, post.get().getUserId(), comment.getId());
 
         return ResponseEntity.ok(postRepository.save(post.get()));
     }

@@ -4,12 +4,12 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import pl.milejmichal.postsmicros.post.comment.AddPostCommentRequest;
+import pl.milejmichal.postsmicros.post.comment.AddCommentRequest;
 
 @RestController
 @RequestMapping("/posts")
 @RequiredArgsConstructor
-public class PostRESTController {
+public class PostController {
 
     final PostService postService;
 
@@ -20,7 +20,7 @@ public class PostRESTController {
     }
 
     @PostMapping("/{postId}/comments")
-    ResponseEntity<Post> addPostComment(@PathVariable String postId, @RequestBody AddPostCommentRequest addPostCommentRequest) {
-        return postService.addPostComment(postId, addPostCommentRequest);
+    ResponseEntity<Post> addComment(@PathVariable String postId, @RequestBody AddCommentRequest addCommentRequest) {
+        return postService.addComment(postId, addCommentRequest);
     }
 }

@@ -7,7 +7,7 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.data.mongodb.repository.config.EnableMongoRepositories;
-import pl.milejmichal.usersmicros.user.UserServiceGRPCImpl;
+import pl.milejmichal.usersmicros.user.grpc.UserServiceGRPCImpl;
 
 @SpringBootApplication
 @EnableMongoRepositories(basePackages = "pl.milejmichal.usersmicros")
