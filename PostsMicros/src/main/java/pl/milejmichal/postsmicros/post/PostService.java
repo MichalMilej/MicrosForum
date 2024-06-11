@@ -10,6 +10,7 @@ import pl.milejmichal.postsmicros.post.rabbitmq.RabbitMQSenderService;
 import pl.milejmichal.postsmicros.post.websocket.PostWebSocketHandler;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 @Service
@@ -39,11 +40,6 @@ public class PostService {
         return savedPost;
     }
 
-    public ResponseEntity<Post> getPost(String postId) {
-        var post = postRepository.findById(postId);
-        return post.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
-    }
-
     public ResponseEntity<Post> addComment(String postId, AddCommentRequest addCommentRequest) {
         var post = postRepository.findById(postId);
         if (post.isEmpty())
@@ -57,6 +53,15 @@ public class PostService {
         rabbitMQSenderService.publishNewCommentId(postId, post.get().getUserId(), comment.getId());
 
         return ResponseEntity.ok(postRepository.save(post.get()));
+    }
+
+    public ResponseEntity<Post> getPost(String postId) {
+        var post = postRepository.findById(postId);
+        return post.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
+    }
+
+    public Optional<Post> getPostGraphQL(String postId) {
+        return postRepository.findById(postId);
     }
 
     public List<Post> getUserPosts(String userId) {

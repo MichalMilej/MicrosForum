@@ -5,14 +5,14 @@ type Query {
 }
 
 type Post {
-    id: ID!
+    id: ID
     userId: String
     text: String
     comments: [Comment]
 }
 
 type Comment {
-    id: ID!
+    id: ID
     userId: String
     text: String
 }

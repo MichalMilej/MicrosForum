@@ -12,20 +12,20 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class PostGraphQLController {
 
-    final PostRepository postRepository;
+    final PostService postService;
 
     @QueryMapping
     public List<Post> getUserPosts(@Argument String userId) {
-        return postRepository.findAllByUserId(userId);
+        return postService.getUserPosts(userId);
     }
 
     @QueryMapping
     public Optional<Post> getPost(@Argument String id) {
-        return postRepository.findById(id);
+        return postService.getPostGraphQL(id);
     }
 
     @QueryMapping
     public List<Post> getPostsByIds(@Argument List<String> ids) {
-        return postRepository.findByIdIn(ids);
+        return postService.getPostsByIds(ids);
     }
 }
