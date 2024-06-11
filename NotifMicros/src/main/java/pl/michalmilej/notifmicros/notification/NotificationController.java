@@ -14,7 +14,7 @@ import pl.michalmilej.notifmicros.grpc.UserDTO;
 @RestController
 @RequestMapping("/notifications")
 @RequiredArgsConstructor
-public class NotificationRESTController {
+public class NotificationController {
 
     final NotificationService notificationService;
 

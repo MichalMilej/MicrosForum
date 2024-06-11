@@ -9,4 +9,5 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class AddUserRequest {
     private String username;
+    private String email;
 }

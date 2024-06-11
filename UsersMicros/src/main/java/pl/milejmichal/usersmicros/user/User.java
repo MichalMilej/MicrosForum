@@ -25,7 +25,14 @@ public class User {
     private HashSet<String> newPostIds = new HashSet<>();
     private HashMap<String, HashSet<String>> newCommentIds = new HashMap<>(); // First map for post id, second for comment ids
 
+    public User() {}
+
     public User(String username) {
         this.username = username;
+    }
+
+    public User(String username, String email) {
+        this.username = username;
+        this.email = email;
     }
 }

@@ -26,11 +26,16 @@ public class UserService {
     public ResponseEntity<User> addUser(AddUserRequest addUserRequest) {
         if (userRepository.findByUsername(addUserRequest.getUsername()).isPresent())
             return ResponseEntity.status(409).build();
-        var savedUser = userRepository.save(new User(addUserRequest.getUsername()));
+        var savedUser = userRepository.save(new User(addUserRequest.getUsername(), addUserRequest.getEmail()));
 
         notifMicrosCommunication.addNotification(new AddNotificationRequest(savedUser.getId()));
 
         return ResponseEntity.status(201).body(savedUser);
+    }
+
+    public ResponseEntity<User> getUser(String userId) {
+        var user = userRepository.findById(userId);
+        return user.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
     }
 
     public User addUser(String userId, String username) throws IllegalArgumentException {
@@ -67,11 +72,6 @@ public class UserService {
         notifMicrosCommunication.updateObservedUserIds(savedUser.getId(), new UpdateObservedUserIdsRequest(observedUserIds));
 
         return savedUser;
-    }
-
-    public ResponseEntity<User> getUser(String userId) {
-        var user = userRepository.findById(userId);
-        return user.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
     }
 
     public ResponseEntity<User> addNewPostId(String userId, AddNewPostIdRequest addNewPostIdRequest) {
