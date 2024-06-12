@@ -11,6 +11,8 @@ import pl.milejmichal.usersmicros.user.request.AddNewPostIdRequest;
 import pl.milejmichal.usersmicros.user.request.AddNotificationRequest;
 import pl.milejmichal.usersmicros.user.request.UpdateObservedUserIdsRequest;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 
@@ -62,9 +64,7 @@ public class UserService {
         if (user.isEmpty())
             throw new IllegalArgumentException("User id not found!");
         for (var userIdToObserve : userIdsToObserve) {
-            if (userRepository.findById(userIdToObserve).isPresent()) {
-                user.get().getObservedUserIds().add(userIdToObserve);
-            }
+            user.get().getObservedUserIds().add(userIdToObserve);
         }
         var savedUser = userRepository.save(user.get());
 
@@ -72,6 +72,11 @@ public class UserService {
         notifMicrosCommunication.updateObservedUserIds(savedUser.getId(), new UpdateObservedUserIdsRequest(observedUserIds));
 
         return savedUser;
+    }
+
+    public User addObservedUserIdsREST(String userId, UpdateObservedUserIdsRequest updateObservedUserIdsRequest) throws IllegalArgumentException {
+       HashSet<String> newObservedUserIds = new HashSet<>(Arrays.asList(updateObservedUserIdsRequest.getObservedUserIds()));
+       return addObservedUserIds(userId, newObservedUserIds);
     }
 
     public ResponseEntity<User> addNewPostId(String userId, AddNewPostIdRequest addNewPostIdRequest) {

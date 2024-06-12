@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.*;
 import pl.milejmichal.usersmicros.post.PostDTO;
 import pl.milejmichal.usersmicros.user.request.AddNewPostIdRequest;
 import pl.milejmichal.usersmicros.user.request.AddUserRequest;
+import pl.milejmichal.usersmicros.user.request.UpdateObservedUserIdsRequest;
 
 import java.util.List;
 
@@ -33,5 +34,11 @@ public class UserController {
     @GetMapping("/{userId}/newPostIds")
     public ResponseEntity<List<PostDTO>> getNewPosts(@PathVariable String userId) {
         return userService.getNewPosts(userId);
+    }
+
+    @PatchMapping("/{userId}/observedUserIds")
+    public User addObservedUserIds(@PathVariable String userId,
+                                                   @RequestBody UpdateObservedUserIdsRequest updateObservedUserIdsRequest) {
+        return userService.addObservedUserIdsREST(userId, updateObservedUserIdsRequest);
     }
 }

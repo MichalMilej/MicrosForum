@@ -15,7 +15,6 @@ import pl.michalmilej.notifmicros.grpc.UserDTO;
 import user.User;
 
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.concurrent.CompletableFuture;
 
@@ -32,6 +31,16 @@ public class NotificationService {
         return notificationRepository.save(new Notification(addNotificationRequest.getUserId()));
     }
 
+    public ResponseEntity<Notification> updateObservedUserIds(String userId, UpdateObservedUserIdsRequest request) {
+        var notification = notificationRepository.findById(userId);
+        if (notification.isEmpty()) {
+            return ResponseEntity.notFound().build();
+        }
+        notification.get().setObservedUserIds(new HashSet<>(Arrays.asList(request.getObservedUserIds())));
+        var savedNotification = notificationRepository.save(notification.get());
+        return ResponseEntity.ok(savedNotification);
+    }
+
     public ResponseEntity<Void> addPostNotification(AddNewPostIdNotificationRequest request) {
         var userId = request.getAuthorId();
         var postId = request.getPostId();
@@ -43,16 +52,6 @@ public class NotificationService {
         rabbitMQSenderService.addNewPostIdsToQueue();
 
         return ResponseEntity.status(201).build();
-    }
-
-    public ResponseEntity<Notification> updateObservedUserIds(String userId, UpdateObservedUserIdsRequest request) {
-        var notification = notificationRepository.findById(userId);
-        if (notification.isEmpty()) {
-            return ResponseEntity.notFound().build();
-        }
-        notification.get().setObservedUserIds(new HashSet<>(Arrays.asList(request.getObservedUserIds())));
-        var savedNotification = notificationRepository.save(notification.get());
-        return ResponseEntity.ok(savedNotification);
     }
 
     public ResponseEntity<Void> addNewCommentIdNotification(String postId, AddNewCommentIdNotificationRequest request) {

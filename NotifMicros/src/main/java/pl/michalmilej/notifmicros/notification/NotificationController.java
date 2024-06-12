@@ -24,6 +24,13 @@ public class NotificationController {
         return notificationService.addNotification(addNotificationRequest);
     }
 
+    @PatchMapping("/{userId}/observed-user-ids")
+    public ResponseEntity<Notification> updateObservedUserIds(
+            @PathVariable String userId,
+            @RequestBody UpdateObservedUserIdsRequest request) {
+        return notificationService.updateObservedUserIds(userId, request);
+    }
+
     @PostMapping("/posts")
     public ResponseEntity<Void> addNewPostIdNotification(@RequestBody AddNewPostIdNotificationRequest request) {
         return notificationService.addPostNotification(request);
@@ -33,12 +40,6 @@ public class NotificationController {
     public ResponseEntity<Void> addNewCommentIdNotification(@PathVariable String postId,
                                                             @RequestBody AddNewCommentIdNotificationRequest request) {
         return notificationService.addNewCommentIdNotification(postId, request);
-    }
-
-    @PatchMapping("/{userId}/observed-user-ids")
-    public ResponseEntity<Notification> updateObservedUserIds(@PathVariable String userId,
-                                                              @RequestBody UpdateObservedUserIdsRequest request) {
-        return notificationService.updateObservedUserIds(userId, request);
     }
 
     @GetMapping("/{userId}/user-details")
