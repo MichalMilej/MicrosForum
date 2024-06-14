@@ -27,7 +27,8 @@ public class UserController {
     }
 
     @PostMapping("/{userId}/newPostIds")
-    public ResponseEntity<User> addNewPostId(@PathVariable String userId, @RequestBody AddNewPostIdRequest addNewPostIdRequest) {
+    public ResponseEntity<User> addNewPostId(@PathVariable String userId,
+                                             @RequestBody AddNewPostIdRequest addNewPostIdRequest) {
         return userService.addNewPostId(userId, addNewPostIdRequest);
     }
 
@@ -38,7 +39,7 @@ public class UserController {
 
     @PatchMapping("/{userId}/observedUserIds")
     public User addObservedUserIds(@PathVariable String userId,
-                                                   @RequestBody UpdateObservedUserIdsRequest updateObservedUserIdsRequest) {
+                                   @RequestBody UpdateObservedUserIdsRequest updateObservedUserIdsRequest) {
         return userService.addObservedUserIdsREST(userId, updateObservedUserIdsRequest);
     }
 }

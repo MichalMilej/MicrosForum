@@ -36,6 +36,8 @@ public class UserInit {
     public void initUsers() {
         for (int i = 0; i < 1000; i++) {
             User user = userService.addUser("" + i, "user" + i, "user" + i + "@mail.com");
+            user.getNewPostIds().add("1");
+            user.getNewPostIds().add("2");
             userRepository.save(user);
         }
 

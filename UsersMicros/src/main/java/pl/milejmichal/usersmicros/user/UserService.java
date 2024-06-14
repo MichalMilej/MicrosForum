@@ -74,7 +74,8 @@ public class UserService {
         return savedUser;
     }
 
-    public User addObservedUserIdsREST(String userId, UpdateObservedUserIdsRequest updateObservedUserIdsRequest) throws IllegalArgumentException {
+    public User addObservedUserIdsREST(String userId, UpdateObservedUserIdsRequest updateObservedUserIdsRequest)
+            throws IllegalArgumentException {
        HashSet<String> newObservedUserIds = new HashSet<>(Arrays.asList(updateObservedUserIdsRequest.getObservedUserIds()));
        return addObservedUserIds(userId, newObservedUserIds);
     }

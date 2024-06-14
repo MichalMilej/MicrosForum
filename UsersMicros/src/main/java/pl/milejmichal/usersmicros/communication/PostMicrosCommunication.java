@@ -36,7 +36,7 @@ public class PostMicrosCommunication {
                 "variables", variables
         );
 
-        var getPostByIdsResponse = webClientPostsMicros.post()
+        GetPostsByIdsResponse getPostByIdsResponse = webClientPostsMicros.post()
                 .uri("/graphql")
                 .bodyValue(body)
                 .retrieve()

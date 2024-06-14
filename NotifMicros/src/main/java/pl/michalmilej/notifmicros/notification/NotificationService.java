@@ -70,7 +70,7 @@ public class NotificationService {
 
         // Send notification to UsersMicros
         CompletableFuture<User.NotifyNewCommentIdResponse> futureResponse =
-                userClient.notifyNewPostCommentId(postId, request.getPostAuthorId(), request.getCommentId());
+                userClient.notifyNewCommentId(postId, request.getPostAuthorId(), request.getCommentId());
         futureResponse.thenAccept(response -> {
             if (response.getSuccess()) {
                 newCommentIds.get(postId).remove(request.getCommentId());
@@ -82,7 +82,7 @@ public class NotificationService {
     }
 
     public UserDTO getUserDetails(String userId) {
-        var userResponse = userClient.getUser(userId);
+        User.GetUserResponse userResponse = userClient.getUser(userId);
         return UserDTO.builder()
                 .id(userResponse.getId())
                 .username(userResponse.getUsername())

@@ -10,8 +10,6 @@ import org.springframework.web.socket.handler.TextWebSocketHandler;
 import pl.michalmilej.notifmicros.notification.NotificationService;
 import pl.michalmilej.notifmicros.notification.request.AddNewPostIdNotificationRequest;
 
-import java.io.IOException;
-
 @Component
 @RequiredArgsConstructor
 public class NotificationWebSocketHandler extends TextWebSocketHandler {
@@ -42,16 +40,6 @@ public class NotificationWebSocketHandler extends TextWebSocketHandler {
     public void afterConnectionClosed(@NonNull WebSocketSession session, @NonNull CloseStatus status) {
         if (this.session != null && this.session.equals(session)) {
             this.session = null;
-        }
-    }
-
-    public void sendMessage(String message) {
-        if (this.session != null && this.session.isOpen()) {
-            try {
-                this.session.sendMessage(new TextMessage(message));
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
         }
     }
 }

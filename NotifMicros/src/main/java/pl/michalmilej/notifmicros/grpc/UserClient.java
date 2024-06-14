@@ -28,9 +28,9 @@ public class UserClient {
         return userServiceBlockingStub.getUser(request);
     }
 
-    public CompletableFuture<User.NotifyNewCommentIdResponse> notifyNewPostCommentId(String postId,
-                                                                                      String postAuthorId,
-                                                                                      String commentId) {
+    public CompletableFuture<User.NotifyNewCommentIdResponse> notifyNewCommentId(String postId,
+             String postAuthorId,
+             String commentId) {
         User.NotifyNewCommentIdRequest request = User.NotifyNewCommentIdRequest.newBuilder()
                 .setPostId(postId)
                 .setPostAuthorId(postAuthorId)
